@@ -126,3 +126,87 @@ Argo CD automatically syncs the change. Check it with:
 ```bash
 curl http://localhost:8888/
 ```
+
+## Study Guide
+
+### Kubernetes basics
+
+Kubernetes is a container orchestration system. It runs containers across one or more machines and keeps the desired state you describe in YAML files.
+
+Important concepts:
+
+- **Cluster**: the full Kubernetes environment.
+- **Node**: a machine in the cluster. It can be a VM, a physical server, or a container in local tools like k3d.
+- **Control plane**: the brain of the cluster. It stores cluster state and schedules workloads.
+- **Worker node**: runs application containers.
+- **Pod**: the smallest deployable unit in Kubernetes. A pod usually runs one application container.
+- **Deployment**: manages pod replicas and rolling updates.
+- **Service**: gives pods a stable network name and IP inside the cluster.
+- **Ingress**: routes HTTP traffic from outside the cluster to services inside the cluster.
+- **Namespace**: separates resources inside the same cluster.
+- **kubectl**: the command-line tool used to talk to Kubernetes.
+
+Useful commands:
+
+```bash
+kubectl get nodes
+kubectl get pods -A
+kubectl get svc
+kubectl get ingress
+kubectl describe pod <pod-name>
+kubectl logs <pod-name>
+kubectl apply -f <file.yaml>
+kubectl delete -f <file.yaml>
+```
+
+### What is K3s?
+
+K3s is a lightweight Kubernetes distribution made by Rancher. It is still Kubernetes, but packaged to be smaller and easier to run on VMs, edge devices, CI environments, and learning projects.
+
+This repository uses K3s in:
+
+- `p1`: one K3s server VM and one K3s agent VM.
+- `p2`: one K3s server VM running three sample apps.
+
+Note: if you wrote `k2s`, you probably mean `K3s`. This project does not use a tool named `k2s`.
+
+### What is k3d?
+
+k3d is a tool that runs K3s clusters inside Docker containers. It is useful when you want a local Kubernetes cluster quickly without creating full VMs.
+
+This repository uses k3d in `p3`:
+
+- Docker runs the local cluster containers.
+- k3d creates the Kubernetes cluster.
+- Argo CD watches the GitHub repository.
+- Argo CD applies the manifests from `p3/confs`.
+
+### K3s vs k3d
+
+| Tool | What it is | Used in this repo |
+| --- | --- | --- |
+| K3s | Lightweight Kubernetes distribution | `p1`, `p2` |
+| k3d | Runs K3s inside Docker containers | `p3` |
+| kubectl | CLI for Kubernetes | `p1`, `p2`, `p3` |
+| Argo CD | GitOps deployment tool | `p3` |
+
+### GitOps basics
+
+GitOps means Git is the source of truth for the cluster. Instead of manually changing the cluster, you change YAML files, commit them, and let a tool apply them.
+
+In this project:
+
+1. You edit files in `p3/confs`.
+2. You commit and push to GitHub.
+3. Argo CD detects the change.
+4. Argo CD syncs the cluster to match Git.
+
+### Useful resources
+
+- Kubernetes basics: https://kubernetes.io/docs/tutorials/kubernetes-basics/
+- Kubernetes concepts: https://kubernetes.io/docs/concepts/
+- kubectl cheat sheet: https://kubernetes.io/docs/reference/kubectl/cheatsheet/
+- K3s documentation: https://docs.k3s.io/
+- k3d documentation: https://k3d.io/
+- Argo CD documentation: https://argo-cd.readthedocs.io/
+- Ingress concept: https://kubernetes.io/docs/concepts/services-networking/ingress/
