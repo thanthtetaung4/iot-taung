@@ -1,0 +1,45 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "bento/ubuntu-24.04"
+
+  # Global VirtualBox settings
+  config.vm.provider "virtualbox" do |vb|
+    vb.gui = false
+    vb.cpus = 1
+  end
+
+  # =========================
+  # K3s Server
+  # =========================
+  config.vm.define "taungS" do |server|
+    server.vm.hostname = "taungS"
+
+    server.vm.network "private_network",
+      ip: "192.168.56.110"
+
+    server.vm.provider "virtualbox" do |vb|
+      vb.name = "taungS"
+      vb.memory = 2048
+    end
+
+    server.vm.provision "shell",
+      path: "scripts/install_server.sh"
+  end
+
+  # =========================
+  # K3s Worker
+  # =========================
+  config.vm.define "taungSW" do |worker|
+    worker.vm.hostname = "taungSW"
+
+    worker.vm.network "private_network",
+      ip: "192.168.56.111"
+
+    worker.vm.provider "virtualbox" do |vb|
+      vb.name = "taungSW"
+      vb.memory = 1024
+    end
+
+    worker.vm.provision "shell",
+      path: "scripts/install_agent.sh"
+  end
+end
