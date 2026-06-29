@@ -6,8 +6,6 @@ metadata:
 spec:
   project: default
   source:
-    # Replace this with your public GitHub repository URL.
-    # The repository name must include a team member login/name as required by the subject.
     repoURL: https://github.com/thanthtetaung4/iot-taung.git
     targetRevision: master
     path: p3/confs
