@@ -5,7 +5,7 @@
 - `taungS` at `192.168.56.110`: K3s server/control-plane.
 - `taungSW` at `192.168.56.111`: K3s agent/worker.
 
-Both machines use the `luminositylabsllc/bento-ubuntu-26.04` Vagrant box and VirtualBox provider.
+Both machines use the `bento/ubuntu-26.04` Vagrant box and VirtualBox provider.
 
 The server writes its K3s node token to `/vagrant/node-token`. The worker waits for that token and then joins the server at `https://192.168.56.110:6443`.
 
