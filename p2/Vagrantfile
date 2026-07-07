@@ -1,7 +1,7 @@
 # P2: one VM, one K3s server, three web apps exposed by Ingress.
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "luminositylabsllc/bento-ubuntu-26.04"
+  config.vm.box = "bento/debian-13"
 
   config.vm.define "taungS" do |server|
     server.vm.hostname = "taungS"

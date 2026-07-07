@@ -14,10 +14,10 @@ kubectl create namespace "$ARGO_NS" --dry-run=client -o yaml | kubectl apply -f 
 kubectl create namespace "$DEV_NS" --dry-run=client -o yaml | kubectl apply -f -
 
 # Install Argo CD
-kubectl apply -n "$ARGO_NS" -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+kubectl apply --server-side -n "$ARGO_NS" -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 kubectl wait --for=condition=available --timeout=300s deployment/argocd-server -n "$ARGO_NS"
 kubectl wait --for=condition=available --timeout=300s deployment/argocd-repo-server -n "$ARGO_NS"
-kubectl wait --for=condition=available --timeout=300s deployment/argocd-application-controller -n "$ARGO_NS" || true
+kubectl wait --for=jsonpath='{.status.readyReplicas}'=1 --timeout=300s statefulset/argocd-application-controller -n "$ARGO_NS"
 
 echo "Cluster ready."
 echo "Next: edit p3/confs/application.yaml and replace repoURL with your public GitHub repository."
